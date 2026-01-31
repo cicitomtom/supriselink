@@ -9,39 +9,121 @@
             text-align: center;
             padding: 20px;
         }
-        .option {
+        .hidden {
+            display: none;
+        }
+        .option, button {
             background: white;
             margin: 15px auto;
-            padding: 10px;
+            padding: 12px;
             width: 280px;
             border-radius: 12px;
             cursor: pointer;
+            border: none;
+            font-size: 16px;
         }
         img {
             width: 100%;
             border-radius: 10px;
+        }
+        button {
+            background-color: #ff4d6d;
+            color: white;
         }
     </style>
 </head>
 
 <body>
 
-<h1>Hey Love 💕</h1>
-<p>Will you be my Valentine?</p>
+<!-- VALENTINE QUESTION -->
+<div id="valentine">
+    <h1>Hey Love 💕</h1>
+    <p>Will you be my Valentine?</p>
+    <button onclick="sayYes()">Yes 💖</button>
+    <button onmouseover="moveNo(this)">No 🙃</button>
+</div>
 
-<h2>Choose our date 🥰</h2>
+<!-- DATE OPTIONS -->
+<div id="dates" class="hidden">
+    <h2>Where do you want us to spend the day together baby? 🥰</h2>
 
-<div class="option">Movie Night 🎬</div>
-<div class="option">Dinner Date 🍽️</div>
-<div class="option">Outing Date 🌆</div>
-<div class="option">Netflix and Chill 😌</div>
+    <div class="option" onclick="chooseDate('Movie Night 🎬')">
+        <img src="moviedate.webp">
+        <p>Movie Night 🎬</p>
+    </div>
 
-<h2>Choose your gift 🎁</h2>
+    <div class="option" onclick="chooseDate('Dinner Date 🍽️')">
+        <img src="dinnerdate.webp">
+        <p>Dinner Date 🍽️</p>
+    </div>
 
-<div class="option">Wristwatch ⌚</div>
-<div class="option">Slides 👟</div>
-<div class="option">Perfume 🌸</div>
-<div class="option">Surprise Me 😏</div>
+    <div class="option" onclick="chooseDate('Outing Date 🌆')">
+        <img src="outingdate.webp">
+        <p>Outing Date 🌆</p>
+    </div>
+
+    <div class="option" onclick="chooseDate('Netflix & Chill 😌')">
+        <img src="netflixandchill.webp">
+        <p>Netflix & Chill 😌</p>
+    </div>
+</div>
+
+<!-- GIFT OPTIONS -->
+<div id="gifts" class="hidden">
+    <h2>What do you want me to gift you baby? 🎁</h2>
+
+    <div class="option" onclick="chooseGift('Wristwatch ⌚')">
+        <img src="wristwatch.webp">
+        <p>Wristwatch ⌚</p>
+    </div>
+
+    <div class="option" onclick="chooseGift('Slides 👟')">
+        <img src="slides.webp">
+        <p>Slides 👟</p>
+    </div>
+
+    <div class="option" onclick="chooseGift('Perfume 🌸')">
+        <img src="perfume.webp">
+        <p>Perfume 🌸</p>
+    </div>
+
+    <div class="option" onclick="chooseGift('Surprise Me 😏')">
+        <img src="supriseme.webp">
+        <p>Surprise Me 😏</p>
+    </div>
+</div>
+
+<p id="result"></p>
+
+<script>
+let selectedDate = "";
+
+function sayYes() {
+    document.getElementById("valentine").classList.add("hidden");
+    document.getElementById("dates").classList.remove("hidden");
+}
+
+function moveNo(button) {
+    button.style.position = "absolute";
+    button.style.left = Math.random() * 80 + "%";
+    button.style.top = Math.random() * 80 + "%";
+}
+
+function chooseDate(date) {
+    selectedDate = date;
+    document.getElementById("dates").classList.add("hidden");
+    document.getElementById("gifts").classList.remove("hidden");
+}
+
+function chooseGift(gift) {
+    document.getElementById("gifts").classList.add("hidden");
+    document.getElementById("result").innerHTML =
+        "Perfect 😍<br><br>" +
+        "Date: <b>" + selectedDate + "</b><br>" +
+        "Gift: <b>" + gift + "</b><br><br>" +
+        "I can’t wait 💖";
+}
+</script>
 
 </body>
 </html>
