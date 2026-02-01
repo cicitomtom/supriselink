@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Be My Valentine 💖</title>
+
     <style>
         body {
             background-color: #ffe6eb;
@@ -9,9 +10,11 @@
             text-align: center;
             padding: 20px;
         }
+
         .hidden {
             display: none;
         }
+
         .option, button {
             background: white;
             margin: 15px auto;
@@ -22,18 +25,41 @@
             border: none;
             font-size: 16px;
         }
-        img {
-            width: 100%;
-            border-radius: 10px;
-        }
+
         button {
             background-color: #ff4d6d;
             color: white;
+        }
+
+        .option img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* Dancing baby */
+        #baby {
+            margin-top: 20px;
+            animation: pop 0.5s ease;
+        }
+
+        @keyframes pop {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 
 <body>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="music/daylight.mp3" type="audio/mpeg">
+</audio>
+
+<!-- DANCING BABY -->
+<div id="baby" class="hidden">
+    <img src="images/love.gif" style="width:200px;">
+</div>
 
 <!-- VALENTINE QUESTION -->
 <div id="valentine">
@@ -48,22 +74,22 @@
     <h2>Where do you want us to spend the day together baby? 🥰</h2>
 
     <div class="option" onclick="chooseDate('Movie Night 🎬')">
-        <img src="moviedate.webp">
+        <img src="images/movie.webp">
         <p>Movie Night 🎬</p>
     </div>
 
     <div class="option" onclick="chooseDate('Dinner Date 🍽️')">
-        <img src="dinnerdate.webp">
+        <img src="images/dinner.webp">
         <p>Dinner Date 🍽️</p>
     </div>
 
     <div class="option" onclick="chooseDate('Outing Date 🌆')">
-        <img src="outingdate.webp">
+        <img src="images/outing.webp">
         <p>Outing Date 🌆</p>
     </div>
 
     <div class="option" onclick="chooseDate('Netflix & Chill 😌')">
-        <img src="netflixandchill.webp">
+        <img src="images/netflix.webp">
         <p>Netflix & Chill 😌</p>
     </div>
 </div>
@@ -73,22 +99,22 @@
     <h2>What do you want me to gift you baby? 🎁</h2>
 
     <div class="option" onclick="chooseGift('Wristwatch ⌚')">
-        <img src="wristwatch.webp">
+        <img src="images/watch.webp">
         <p>Wristwatch ⌚</p>
     </div>
 
     <div class="option" onclick="chooseGift('Slides 👟')">
-        <img src="slides.webp">
+        <img src="images/slides.webp">
         <p>Slides 👟</p>
     </div>
 
     <div class="option" onclick="chooseGift('Perfume 🌸')">
-        <img src="perfume.webp">
+        <img src="images/perfume.webp">
         <p>Perfume 🌸</p>
     </div>
 
     <div class="option" onclick="chooseGift('Surprise Me 😏')">
-        <img src="supriseme.webp">
+        <img src="images/surprise.webp">
         <p>Surprise Me 😏</p>
     </div>
 </div>
@@ -98,9 +124,17 @@
 <script>
 let selectedDate = "";
 
+function showBaby() {
+    const baby = document.getElementById("baby");
+    baby.classList.remove("hidden");
+    setTimeout(() => baby.classList.add("hidden"), 3000);
+}
+
 function sayYes() {
     document.getElementById("valentine").classList.add("hidden");
     document.getElementById("dates").classList.remove("hidden");
+    document.getElementById("bgMusic").play();
+    showBaby();
 }
 
 function moveNo(button) {
@@ -113,6 +147,7 @@ function chooseDate(date) {
     selectedDate = date;
     document.getElementById("dates").classList.add("hidden");
     document.getElementById("gifts").classList.remove("hidden");
+    showBaby();
 }
 
 function chooseGift(gift) {
@@ -122,6 +157,7 @@ function chooseGift(gift) {
         "Date: <b>" + selectedDate + "</b><br>" +
         "Gift: <b>" + gift + "</b><br><br>" +
         "I can’t wait 💖";
+    showBaby();
 }
 </script>
 
