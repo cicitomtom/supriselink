@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Be My Valentine 💖</title>
@@ -48,11 +48,10 @@
             position: fixed;
             inset: 0;
             background: #ffe6eb;
-            display: flex;
+            display: none; /* hidden by default */
             align-items: center;
             justify-content: center;
             z-index: 999;
-            display: none; /* HIDDEN BY DEFAULT */
         }
     </style>
 </head>
@@ -128,15 +127,6 @@
 
 <script>
 let chosenDate = "";
-let musicStarted = false;
-
-// Start music on first click anywhere
-document.body.addEventListener("click", () => {
-    if (!musicStarted) {
-        document.getElementById("bgMusic").play().catch(()=>{});
-        musicStarted = true;
-    }
-}, { once: true });
 
 // Show dancing baby for 5 seconds, then call next step
 function showBaby(nextStep) {
@@ -148,9 +138,14 @@ function showBaby(nextStep) {
     }, 5000);
 }
 
-// User clicked YES
+// User clicked YES → start music + dancing baby
 function startYes() {
     document.getElementById("valentine").classList.add("hidden");
+
+    // start music
+    const music = document.getElementById("bgMusic");
+    music.play().catch(()=>{}); // ignore autoplay issues
+
     showBaby(() => {
         document.getElementById("dates").classList.remove("hidden");
     });
@@ -159,4 +154,34 @@ function startYes() {
 // User picks date
 function pickDate(date) {
     chosenDate = date;
-    document.getElementById("dates").classList.add("hidd
+    document.getElementById("dates").classList.add("hidden");
+    showBaby(() => {
+        document.getElementById("gifts").classList.remove("hidden");
+    });
+}
+
+// User picks gift
+function pickGift(gift) {
+    document.getElementById("gifts").classList.add("hidden");
+    showBaby(() => {
+        const result = document.getElementById("result");
+        result.innerHTML = `
+            <h2>Perfect 😍</h2>
+            <p>Date: <b>${chosenDate}</b></p>
+            <p>Gift: <b>${gift}</b></p>
+            <p>I can’t wait 💖</p>
+        `;
+        result.classList.remove("hidden");
+    });
+}
+
+// No button run away
+function moveNo(btn) {
+    btn.style.position = "absolute";
+    btn.style.left = Math.random() * 80 + "%";
+    btn.style.top = Math.random() * 80 + "%";
+}
+</script>
+
+</body>
+</html>
