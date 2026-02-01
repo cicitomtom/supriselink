@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
     <title>Be My Valentine 💖</title>
@@ -52,6 +52,7 @@
             align-items: center;
             justify-content: center;
             z-index: 999;
+            display: none; /* HIDDEN BY DEFAULT */
         }
     </style>
 </head>
@@ -63,8 +64,8 @@
     <source src="music/daylight.mp3" type="audio/mpeg">
 </audio>
 
-<!-- DANCING BABY (HIDDEN BY DEFAULT) -->
-<div id="babyScreen" class="hidden">
+<!-- DANCING BABY -->
+<div id="babyScreen">
     <img src="images/love.gif" style="width:240px;">
 </div>
 
@@ -135,17 +136,16 @@ document.body.addEventListener("click", () => {
         document.getElementById("bgMusic").play().catch(()=>{});
         musicStarted = true;
     }
-}, { once: true }); // only once
+}, { once: true });
 
 // Show dancing baby for 5 seconds, then call next step
 function showBaby(nextStep) {
     const baby = document.getElementById("babyScreen");
-    baby.classList.remove("hidden");
-
+    baby.style.display = "flex";
     setTimeout(() => {
-        baby.classList.add("hidden");
+        baby.style.display = "none";
         if (nextStep) nextStep();
-    }, 5000); // 5 seconds
+    }, 5000);
 }
 
 // User clicked YES
@@ -159,34 +159,4 @@ function startYes() {
 // User picks date
 function pickDate(date) {
     chosenDate = date;
-    document.getElementById("dates").classList.add("hidden");
-    showBaby(() => {
-        document.getElementById("gifts").classList.remove("hidden");
-    });
-}
-
-// User picks gift
-function pickGift(gift) {
-    document.getElementById("gifts").classList.add("hidden");
-    showBaby(() => {
-        const result = document.getElementById("result");
-        result.innerHTML = `
-            <h2>Perfect 😍</h2>
-            <p>Date: <b>${chosenDate}</b></p>
-            <p>Gift: <b>${gift}</b></p>
-            <p>I can’t wait 💖</p>
-        `;
-        result.classList.remove("hidden");
-    });
-}
-
-// No button run away
-function moveNo(btn) {
-    btn.style.position = "absolute";
-    btn.style.left = Math.random() * 80 + "%";
-    btn.style.top = Math.random() * 80 + "%";
-}
-</script>
-
-</body>
-</html>
+    document.getElementById("dates").classList.add("hidd
