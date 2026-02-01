@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+            <!DOCTYPE html>
 <html>
 <head>
     <title>Be My Valentine 💖</title>
@@ -142,9 +142,11 @@ function showBaby(nextStep) {
 function startYes() {
     document.getElementById("valentine").classList.add("hidden");
 
-    // start music
+    // Start music on first click
     const music = document.getElementById("bgMusic");
-    music.play().catch(()=>{}); // ignore autoplay issues
+    music.play().catch(() => {
+        console.log("Autoplay prevented, user interaction required.");
+    });
 
     showBaby(() => {
         document.getElementById("dates").classList.remove("hidden");
@@ -160,7 +162,7 @@ function pickDate(date) {
     });
 }
 
-// User picks gift
+// User picks gift → final result
 function pickGift(gift) {
     document.getElementById("gifts").classList.add("hidden");
     showBaby(() => {
@@ -170,6 +172,7 @@ function pickGift(gift) {
             <p>Date: <b>${chosenDate}</b></p>
             <p>Gift: <b>${gift}</b></p>
             <p>I can’t wait 💖</p>
+            <p>See you on the 14th of February my love 💌</p>
         `;
         result.classList.remove("hidden");
     });
