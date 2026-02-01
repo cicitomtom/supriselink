@@ -34,7 +34,7 @@
             margin-top: 15px;
         }
 
-        /* Dancing baby full screen with fade animation */
+        /* Dancing baby full screen with fade */
         #babyScreen {
             position: fixed;
             inset: 0;
@@ -44,14 +44,16 @@
             justify-content: center;
             z-index: 999;
             opacity: 0;
+            pointer-events: none; /* important: allow clicks through */
             transition: opacity 0.8s ease;
         }
 
         #babyScreen.show { opacity: 1; }
 
-        /* Ending message animation */
+        /* Result message fade */
         #result {
             font-size: 20px;
+            opacity: 0;
             animation: fadeIn 1.5s ease forwards;
         }
 
@@ -63,17 +65,16 @@
 </head>
 <body>
 
-<!-- MUSIC -->
 <audio id="bgMusic" loop>
     <source src="music/daylight.mp3" type="audio/mpeg">
 </audio>
 
-<!-- DANCING BABY -->
+<!-- Dancing baby -->
 <div id="babyScreen">
     <img src="images/love.gif" style="width:240px;">
 </div>
 
-<!-- VALENTINE -->
+<!-- Valentine question -->
 <div id="valentine">
     <h1>Hey Love 💕</h1>
     <p>Will you be my Valentine?</p>
@@ -81,7 +82,7 @@
     <button onmouseover="moveNo(this)">No 🙃</button>
 </div>
 
-<!-- DATES -->
+<!-- Date options -->
 <div id="dates" class="hidden">
     <h2>Where do you want us to spend the day together baby? 🥰</h2>
     <div class="optionsContainer">
@@ -100,7 +101,7 @@
     </div>
 </div>
 
-<!-- GIFTS -->
+<!-- Gift options -->
 <div id="gifts" class="hidden">
     <h2>What do you want me to gift you baby? 🎁</h2>
     <div class="optionsContainer">
@@ -119,13 +120,13 @@
     </div>
 </div>
 
-<!-- RESULT -->
+<!-- Final result -->
 <div id="result" class="hidden"></div>
 
 <script>
 let chosenDate = "";
 
-// Show dancing baby with fade in/out
+// Show dancing baby for 5 seconds with fade
 function showBaby(nextStep) {
     const baby = document.getElementById("babyScreen");
     baby.classList.add("show");
@@ -136,17 +137,17 @@ function showBaby(nextStep) {
         setTimeout(() => {
             baby.style.display = "none";
             if(nextStep) nextStep();
-        }, 800); // wait for fade-out
-    }, 5000); // visible for 5 seconds
+        }, 800); // fade out
+    }, 5000);
 }
 
-// Yes button click → start music + dancing baby
+// Yes button click → start music + baby
 document.getElementById("yesBtn").addEventListener("click", () => {
     document.getElementById("valentine").classList.add("hidden");
 
     // play music
     const music = document.getElementById("bgMusic");
-    music.play().catch(()=>{});
+    music.play().catch(()=>{}); // browser autoplay restrictions
 
     showBaby(() => {
         document.getElementById("dates").classList.remove("hidden");
@@ -162,7 +163,7 @@ function pickDate(date) {
     });
 }
 
-// Pick gift → final result with fade in
+// Pick gift → final result
 function pickGift(gift) {
     document.getElementById("gifts").classList.add("hidden");
     showBaby(() => {
@@ -178,7 +179,7 @@ function pickGift(gift) {
     });
 }
 
-// No button runs away
+// No button run away
 function moveNo(btn) {
     btn.style.position = "absolute";
     btn.style.left = Math.random() * 80 + "%";
