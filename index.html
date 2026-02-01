@@ -15,7 +15,7 @@
             display: none;
         }
 
-        .option, button {
+        button, .option {
             background: white;
             margin: 15px auto;
             padding: 12px;
@@ -31,19 +31,20 @@
             color: white;
         }
 
-        .option img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        /* Dancing baby */
-        #baby {
-            margin-top: 20px;
+        /* Dancing baby screen */
+        #babyScreen {
+            position: fixed;
+            inset: 0;
+            background: #ffe6eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
             animation: pop 0.5s ease;
         }
 
         @keyframes pop {
-            from { transform: scale(0.5); opacity: 0; }
+            from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
     </style>
@@ -56,16 +57,16 @@
     <source src="music/daylight.mp3" type="audio/mpeg">
 </audio>
 
-<!-- DANCING BABY -->
-<div id="baby" class="hidden">
-    <img src="images/love.gif" style="width:200px;">
+<!-- DANCING BABY SCREEN -->
+<div id="babyScreen" class="hidden">
+    <img src="images/love.gif" style="width:220px;">
 </div>
 
 <!-- VALENTINE QUESTION -->
 <div id="valentine">
     <h1>Hey Love 💕</h1>
     <p>Will you be my Valentine?</p>
-    <button onclick="sayYes()">Yes 💖</button>
+    <button onclick="startFlow()">Yes 💖</button>
     <button onmouseover="moveNo(this)">No 🙃</button>
 </div>
 
@@ -73,93 +74,84 @@
 <div id="dates" class="hidden">
     <h2>Where do you want us to spend the day together baby? 🥰</h2>
 
-    <div class="option" onclick="chooseDate('Movie Night 🎬')">
-        <img src="images/movie.webp">
-        <p>Movie Night 🎬</p>
-    </div>
-
-    <div class="option" onclick="chooseDate('Dinner Date 🍽️')">
-        <img src="images/dinner.webp">
-        <p>Dinner Date 🍽️</p>
-    </div>
-
-    <div class="option" onclick="chooseDate('Outing Date 🌆')">
-        <img src="images/outing.webp">
-        <p>Outing Date 🌆</p>
-    </div>
-
-    <div class="option" onclick="chooseDate('Netflix & Chill 😌')">
-        <img src="images/netflix.webp">
-        <p>Netflix & Chill 😌</p>
-    </div>
+    <div class="option" onclick="pickDate('Movie Night 🎬')">Movie Night 🎬</div>
+    <div class="option" onclick="pickDate('Dinner Date 🍽️')">Dinner Date 🍽️</div>
+    <div class="option" onclick="pickDate('Outing Date 🌆')">Outing Date 🌆</div>
+    <div class="option" onclick="pickDate('Netflix & Chill 😌')">Netflix & Chill 😌</div>
 </div>
 
 <!-- GIFT OPTIONS -->
 <div id="gifts" class="hidden">
     <h2>What do you want me to gift you baby? 🎁</h2>
 
-    <div class="option" onclick="chooseGift('Wristwatch ⌚')">
-        <img src="images/watch.webp">
-        <p>Wristwatch ⌚</p>
-    </div>
-
-    <div class="option" onclick="chooseGift('Slides 👟')">
-        <img src="images/slides.webp">
-        <p>Slides 👟</p>
-    </div>
-
-    <div class="option" onclick="chooseGift('Perfume 🌸')">
-        <img src="images/perfume.webp">
-        <p>Perfume 🌸</p>
-    </div>
-
-    <div class="option" onclick="chooseGift('Surprise Me 😏')">
-        <img src="images/surprise.webp">
-        <p>Surprise Me 😏</p>
-    </div>
+    <div class="option" onclick="pickGift('Wristwatch ⌚')">Wristwatch ⌚</div>
+    <div class="option" onclick="pickGift('Slides 👟')">Slides 👟</div>
+    <div class="option" onclick="pickGift('Perfume 🌸')">Perfume 🌸</div>
+    <div class="option" onclick="pickGift('Surprise Me 😏')">Surprise Me 😏</div>
 </div>
 
-<p id="result"></p>
+<!-- RESULT -->
+<div id="result" class="hidden"></div>
 
 <script>
-let selectedDate = "";
+let chosenDate = "";
 
-function showBaby() {
-    const baby = document.getElementById("baby");
-    baby.classList.remove("hidden");
-    setTimeout(() => baby.classList.add("hidden"), 3000);
+/* Utility to show dancing baby for 3 seconds */
+function showBaby(nextStep) {
+    document.getElementById("babyScreen").classList.remove("hidden");
+
+    setTimeout(() => {
+        document.getElementById("babyScreen").classList.add("hidden");
+        nextStep();
+    }, 3000);
 }
 
-function sayYes() {
+/* Start flow after YES */
+function startFlow() {
     document.getElementById("valentine").classList.add("hidden");
-    document.getElementById("dates").classList.remove("hidden");
-    document.getElementById("bgMusic").play();
-    showBaby();
+
+    const music = document.getElementById("bgMusic");
+    music.play().catch(() => {}); // prevents browser error
+
+    showBaby(() => {
+        document.getElementById("dates").classList.remove("hidden");
+    });
 }
 
-function moveNo(button) {
-    button.style.position = "absolute";
-    button.style.left = Math.random() * 80 + "%";
-    button.style.top = Math.random() * 80 + "%";
-}
-
-function chooseDate(date) {
-    selectedDate = date;
+/* Date picked */
+function pickDate(date) {
+    chosenDate = date;
     document.getElementById("dates").classList.add("hidden");
-    document.getElementById("gifts").classList.remove("hidden");
-    showBaby();
+
+    showBaby(() => {
+        document.getElementById("gifts").classList.remove("hidden");
+    });
 }
 
-function chooseGift(gift) {
+/* Gift picked */
+function pickGift(gift) {
     document.getElementById("gifts").classList.add("hidden");
-    document.getElementById("result").innerHTML =
-        "Perfect 😍<br><br>" +
-        "Date: <b>" + selectedDate + "</b><br>" +
-        "Gift: <b>" + gift + "</b><br><br>" +
-        "I can’t wait 💖";
-    showBaby();
+
+    showBaby(() => {
+        const result = document.getElementById("result");
+        result.innerHTML = `
+            <h2>Perfect 😍</h2>
+            <p>Date: <b>${chosenDate}</b></p>
+            <p>Gift: <b>${gift}</b></p>
+            <p>I can’t wait 💖</p>
+        `;
+        result.classList.remove("hidden");
+    });
+}
+
+/* No button run away */
+function moveNo(btn) {
+    btn.style.position = "absolute";
+    btn.style.left = Math.random() * 80 + "%";
+    btn.style.top = Math.random() * 80 + "%";
 }
 </script>
 
 </body>
 </html>
+
