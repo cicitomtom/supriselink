@@ -17,9 +17,8 @@
 
         button, .option {
             background: white;
-            margin: 15px auto;
+            margin: 10px auto;
             padding: 12px;
-            width: 280px;
             border-radius: 12px;
             cursor: pointer;
             border: none;
@@ -36,6 +35,14 @@
             border-radius: 10px;
         }
 
+        .optionsContainer {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            justify-items: center;
+            margin-top: 15px;
+        }
+
         /* Dancing baby full screen */
         #babyScreen {
             position: fixed;
@@ -49,14 +56,14 @@
     </style>
 </head>
 
-<body onclick="startMusic()">
+<body>
 
 <!-- MUSIC -->
 <audio id="bgMusic" loop>
     <source src="music/daylight.mp3" type="audio/mpeg">
 </audio>
 
-<!-- DANCING BABY -->
+<!-- DANCING BABY (HIDDEN BY DEFAULT) -->
 <div id="babyScreen" class="hidden">
     <img src="images/love.gif" style="width:240px;">
 </div>
@@ -72,50 +79,46 @@
 <!-- DATES -->
 <div id="dates" class="hidden">
     <h2>Where do you want us to spend the day together baby? 🥰</h2>
-
-    <div class="option" onclick="pickDate('Movie Night 🎬')">
-        <img src="images/movie.webp">
-        <p>Movie Night 🎬</p>
-    </div>
-
-    <div class="option" onclick="pickDate('Dinner Date 🍽️')">
-        <img src="images/dinner.webp">
-        <p>Dinner Date 🍽️</p>
-    </div>
-
-    <div class="option" onclick="pickDate('Outing Date 🌆')">
-        <img src="images/outing.webp">
-        <p>Outing Date 🌆</p>
-    </div>
-
-    <div class="option" onclick="pickDate('Netflix & Chill 😌')">
-        <img src="images/netflix.webp">
-        <p>Netflix & Chill 😌</p>
+    <div class="optionsContainer">
+        <div class="option" onclick="pickDate('Movie Night 🎬')">
+            <img src="images/movie.webp">
+            <p>Movie Night 🎬</p>
+        </div>
+        <div class="option" onclick="pickDate('Dinner Date 🍽️')">
+            <img src="images/dinner.webp">
+            <p>Dinner Date 🍽️</p>
+        </div>
+        <div class="option" onclick="pickDate('Outing Date 🌆')">
+            <img src="images/outing.webp">
+            <p>Outing Date 🌆</p>
+        </div>
+        <div class="option" onclick="pickDate('Netflix & Chill 😌')">
+            <img src="images/netflix.webp">
+            <p>Netflix & Chill 😌</p>
+        </div>
     </div>
 </div>
 
 <!-- GIFTS -->
 <div id="gifts" class="hidden">
     <h2>What do you want me to gift you baby? 🎁</h2>
-
-    <div class="option" onclick="pickGift('Wristwatch ⌚')">
-        <img src="images/watch.webp">
-        <p>Wristwatch ⌚</p>
-    </div>
-
-    <div class="option" onclick="pickGift('Slides 👟')">
-        <img src="images/slides.webp">
-        <p>Slides 👟</p>
-    </div>
-
-    <div class="option" onclick="pickGift('Perfume 🌸')">
-        <img src="images/perfume.webp">
-        <p>Perfume 🌸</p>
-    </div>
-
-    <div class="option" onclick="pickGift('Surprise Me 😏')">
-        <img src="images/surprise.webp">
-        <p>Surprise Me 😏</p>
+    <div class="optionsContainer">
+        <div class="option" onclick="pickGift('Wristwatch ⌚')">
+            <img src="images/watch.webp">
+            <p>Wristwatch ⌚</p>
+        </div>
+        <div class="option" onclick="pickGift('Slides 👟')">
+            <img src="images/slides.webp">
+            <p>Slides 👟</p>
+        </div>
+        <div class="option" onclick="pickGift('Perfume 🌸')">
+            <img src="images/perfume.webp">
+            <p>Perfume 🌸</p>
+        </div>
+        <div class="option" onclick="pickGift('Surprise Me 😏')">
+            <img src="images/surprise.webp">
+            <p>Surprise Me 😏</p>
+        </div>
     </div>
 </div>
 
@@ -126,21 +129,26 @@
 let chosenDate = "";
 let musicStarted = false;
 
-function startMusic() {
+// Start music on first click anywhere
+document.body.addEventListener("click", () => {
     if (!musicStarted) {
         document.getElementById("bgMusic").play().catch(()=>{});
         musicStarted = true;
     }
-}
+}, { once: true }); // only once
 
-function showBaby(next) {
-    document.getElementById("babyScreen").classList.remove("hidden");
+// Show dancing baby for 5 seconds, then call next step
+function showBaby(nextStep) {
+    const baby = document.getElementById("babyScreen");
+    baby.classList.remove("hidden");
+
     setTimeout(() => {
-        document.getElementById("babyScreen").classList.add("hidden");
-        next();
+        baby.classList.add("hidden");
+        if (nextStep) nextStep();
     }, 5000); // 5 seconds
 }
 
+// User clicked YES
 function startYes() {
     document.getElementById("valentine").classList.add("hidden");
     showBaby(() => {
@@ -148,6 +156,7 @@ function startYes() {
     });
 }
 
+// User picks date
 function pickDate(date) {
     chosenDate = date;
     document.getElementById("dates").classList.add("hidden");
@@ -156,6 +165,7 @@ function pickDate(date) {
     });
 }
 
+// User picks gift
 function pickGift(gift) {
     document.getElementById("gifts").classList.add("hidden");
     showBaby(() => {
@@ -170,6 +180,7 @@ function pickGift(gift) {
     });
 }
 
+// No button run away
 function moveNo(btn) {
     btn.style.position = "absolute";
     btn.style.left = Math.random() * 80 + "%";
