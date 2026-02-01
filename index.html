@@ -1,8 +1,7 @@
-            <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Be My Valentine 💖</title>
-
     <style>
         body {
             background-color: #ffe6eb;
@@ -11,9 +10,7 @@
             padding: 20px;
         }
 
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
 
         button, .option {
             background: white;
@@ -25,15 +22,9 @@
             font-size: 16px;
         }
 
-        button {
-            background-color: #ff4d6d;
-            color: white;
-        }
+        button { background-color: #ff4d6d; color: white; }
 
-        .option img {
-            width: 100%;
-            border-radius: 10px;
-        }
+        .option img { width: 100%; border-radius: 10px; }
 
         .optionsContainer {
             display: grid;
@@ -43,19 +34,33 @@
             margin-top: 15px;
         }
 
-        /* Dancing baby full screen */
+        /* Dancing baby full screen with fade animation */
         #babyScreen {
             position: fixed;
             inset: 0;
             background: #ffe6eb;
-            display: none; /* hidden by default */
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 999;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        #babyScreen.show { opacity: 1; }
+
+        /* Ending message animation */
+        #result {
+            font-size: 20px;
+            animation: fadeIn 1.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
-
 <body>
 
 <!-- MUSIC -->
@@ -72,7 +77,7 @@
 <div id="valentine">
     <h1>Hey Love 💕</h1>
     <p>Will you be my Valentine?</p>
-    <button onclick="startYes()">Yes 💖</button>
+    <button id="yesBtn">Yes 💖</button>
     <button onmouseover="moveNo(this)">No 🙃</button>
 </div>
 
@@ -81,20 +86,16 @@
     <h2>Where do you want us to spend the day together baby? 🥰</h2>
     <div class="optionsContainer">
         <div class="option" onclick="pickDate('Movie Night 🎬')">
-            <img src="images/movie.webp">
-            <p>Movie Night 🎬</p>
+            <img src="images/movie.webp"><p>Movie Night 🎬</p>
         </div>
         <div class="option" onclick="pickDate('Dinner Date 🍽️')">
-            <img src="images/dinner.webp">
-            <p>Dinner Date 🍽️</p>
+            <img src="images/dinner.webp"><p>Dinner Date 🍽️</p>
         </div>
         <div class="option" onclick="pickDate('Outing Date 🌆')">
-            <img src="images/outing.webp">
-            <p>Outing Date 🌆</p>
+            <img src="images/outing.webp"><p>Outing Date 🌆</p>
         </div>
         <div class="option" onclick="pickDate('Netflix & Chill 😌')">
-            <img src="images/netflix.webp">
-            <p>Netflix & Chill 😌</p>
+            <img src="images/netflix.webp"><p>Netflix & Chill 😌</p>
         </div>
     </div>
 </div>
@@ -104,20 +105,16 @@
     <h2>What do you want me to gift you baby? 🎁</h2>
     <div class="optionsContainer">
         <div class="option" onclick="pickGift('Wristwatch ⌚')">
-            <img src="images/watch.webp">
-            <p>Wristwatch ⌚</p>
+            <img src="images/watch.webp"><p>Wristwatch ⌚</p>
         </div>
         <div class="option" onclick="pickGift('Slides 👟')">
-            <img src="images/slides.webp">
-            <p>Slides 👟</p>
+            <img src="images/slides.webp"><p>Slides 👟</p>
         </div>
         <div class="option" onclick="pickGift('Perfume 🌸')">
-            <img src="images/perfume.webp">
-            <p>Perfume 🌸</p>
+            <img src="images/perfume.webp"><p>Perfume 🌸</p>
         </div>
         <div class="option" onclick="pickGift('Surprise Me 😏')">
-            <img src="images/surprise.webp">
-            <p>Surprise Me 😏</p>
+            <img src="images/surprise.webp"><p>Surprise Me 😏</p>
         </div>
     </div>
 </div>
@@ -128,32 +125,35 @@
 <script>
 let chosenDate = "";
 
-// Show dancing baby for 5 seconds, then call next step
+// Show dancing baby with fade in/out
 function showBaby(nextStep) {
     const baby = document.getElementById("babyScreen");
+    baby.classList.add("show");
     baby.style.display = "flex";
+
     setTimeout(() => {
-        baby.style.display = "none";
-        if (nextStep) nextStep();
-    }, 5000);
+        baby.classList.remove("show");
+        setTimeout(() => {
+            baby.style.display = "none";
+            if(nextStep) nextStep();
+        }, 800); // wait for fade-out
+    }, 5000); // visible for 5 seconds
 }
 
-// User clicked YES → start music + dancing baby
-function startYes() {
+// Yes button click → start music + dancing baby
+document.getElementById("yesBtn").addEventListener("click", () => {
     document.getElementById("valentine").classList.add("hidden");
 
-    // Start music on first click
+    // play music
     const music = document.getElementById("bgMusic");
-    music.play().catch(() => {
-        console.log("Autoplay prevented, user interaction required.");
-    });
+    music.play().catch(()=>{});
 
     showBaby(() => {
         document.getElementById("dates").classList.remove("hidden");
     });
-}
+});
 
-// User picks date
+// Pick date
 function pickDate(date) {
     chosenDate = date;
     document.getElementById("dates").classList.add("hidden");
@@ -162,7 +162,7 @@ function pickDate(date) {
     });
 }
 
-// User picks gift → final result
+// Pick gift → final result with fade in
 function pickGift(gift) {
     document.getElementById("gifts").classList.add("hidden");
     showBaby(() => {
@@ -178,7 +178,7 @@ function pickGift(gift) {
     });
 }
 
-// No button run away
+// No button runs away
 function moveNo(btn) {
     btn.style.position = "absolute";
     btn.style.left = Math.random() * 80 + "%";
